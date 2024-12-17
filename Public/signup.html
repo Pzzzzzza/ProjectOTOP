@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>สมัครสมาชิก</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <h1>สมัครสมาชิก</h1>
+        <nav>
+            <a href="index.html">หน้าแรก</a>
+            <a href="login.html">เข้าสู่ระบบ</a>
+        </nav>
+    </header>
+
+    <!-- Signup Form -->
+    <main>
+        <section class="form-container">
+            <h2>กรอกข้อมูลเพื่อสมัครสมาชิก</h2>
+            <form id="signupForm">
+                <label for="name">ชื่อ-นามสกุล:</label>
+                <input type="text" id="name" name="name" required>
+
+                <label for="email">อีเมล:</label>
+                <input type="email" id="email" name="email" required>
+
+                <label for="dob">วันเดือนปีเกิด:</label>
+                <input type="date" id="dob" name="dob" required>
+
+                <label for="address">ที่อยู่:</label>
+                <textarea id="address" name="address" rows="3" required></textarea>
+
+                <label for="password">รหัสผ่าน:</label>
+                <input type="password" id="password" name="password" required>
+
+                <button type="submit">สมัครสมาชิก</button>
+            </form>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <p>© 2024 ร้านค้าโอท็อป | สนับสนุนสินค้าชุมชน</p>
+    </footer>
+
+    <!-- JavaScript -->
+    <script>
+        document.getElementById('signupForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            // รับค่าจากฟอร์ม
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const dob = document.getElementById('dob').value;
+            const address = document.getElementById('address').value;
+            const password = document.getElementById('password').value;
+
+            // บันทึกข้อมูลลง Local Storage
+            const userData = { name, email, dob, address, password };
+            localStorage.setItem('user', JSON.stringify(userData));
+
+            // แจ้งเตือนและเปลี่ยนหน้าไป login.html
+            alert('สมัครสมาชิกสำเร็จ! กรุณาเข้าสู่ระบบ');
+            window.location.href = 'login.html';
+        });
+    </script>
+</body>
+</html>

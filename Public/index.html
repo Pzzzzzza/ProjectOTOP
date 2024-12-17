@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>หน้าแรก - ร้านค้าโอท็อป</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <h1>ยินดีต้อนรับสู่ร้านค้าโอท็อป</h1>
+        <nav>
+            <a href="index.html">หน้าแรก</a>
+            <a href="shop.html">ร้านค้า</a>
+            <a href="cart.html">รถเข็น</a>
+            <a href="login.html" id="loginLink">เข้าสู่ระบบ</a>
+            <a href="#" id="logoutLink" style="display: none;">ออกจากระบบ</a>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+        <section class="welcome">
+            <h2>สินค้าคุณภาพจากชุมชนของเรา</h2>
+            <p>เรารวบรวมผลิตภัณฑ์ที่ดีที่สุดจากชุมชนต่าง ๆ มาให้คุณเลือกสรร พร้อมสนับสนุนสินค้าพื้นเมืองไทย</p>
+        </section>
+
+        <section class="featured-products">
+            <h2>สินค้าแนะนำ</h2>
+            <div class="product-list">
+                <div class="product">
+                    <img src="product1.jpg" alt="สินค้า 1" style="width:100%; height:auto;">
+                    <h3>สินค้า 1</h3>
+                    <p>ราคา: 150 บาท</p>
+                </div>
+                <div class="product">
+                    <img src="product2.jpg" alt="สินค้า 2" style="width:100%; height:auto;">
+                    <h3>สินค้า 2</h3>
+                    <p>ราคา: 200 บาท</p>
+                </div>
+                <div class="product">
+                    <img src="product3.jpg" alt="สินค้า 3" style="width:100%; height:auto;">
+                    <h3>สินค้า 3</h3>
+                    <p>ราคา: 250 บาท</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <p>© 2024 ร้านค้าโอท็อป | สนับสนุนสินค้าชุมชน</p>
+    </footer>
+
+    <!-- JavaScript -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const isLoggedIn = localStorage.getItem('isLoggedIn');
+            const currentUser = JSON.parse(localStorage.getItem('user'));
+
+            const loginLink = document.getElementById('loginLink');
+            const logoutLink = document.getElementById('logoutLink');
+
+            if (isLoggedIn === 'true' && currentUser) {
+                loginLink.style.display = 'none';
+                logoutLink.style.display = 'inline';
+
+                logoutLink.addEventListener('click', function() {
+                    localStorage.removeItem('isLoggedIn');
+                    localStorage.removeItem('user');
+                    alert('ออกจากระบบสำเร็จ!');
+                    window.location.href = 'index.html';
+                });
+            }
+        });
+    </script>
+</body>
+</html>

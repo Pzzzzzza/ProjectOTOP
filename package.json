@@ -1,0 +1,14 @@
+{
+  "name": "online-store",
+  "version": "1.0.0",
+  "description": "ร้านค้าออนไลน์ OTOP",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2"
+  },
+  "author": "Your Name",
+  "license": "ISC"
+}

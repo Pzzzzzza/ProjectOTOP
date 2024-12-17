@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>รถเข็นสินค้า</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <h1>รถเข็นสินค้า</h1>
+        <nav>
+            <a href="index.html">หน้าแรก</a>
+            <a href="shop.html">ร้านค้า</a>
+            <a href="cart.html">รถเข็น</a>
+            <a href="login.html" id="loginLink">เข้าสู่ระบบ</a>
+            <a href="#" id="logoutLink" style="display: none;">ออกจากระบบ</a>
+        </nav>
+    </header>
+
+    <!-- Cart Section -->
+    <main>
+        <section id="cartContainer" class="cart-container">
+            <h2>รายการสินค้าในรถเข็น</h2>
+            <table id="cartTable">
+                <thead>
+                    <tr>
+                        <th>ชื่อสินค้า</th>
+                        <th>ราคา</th>
+                        <th>จำนวน</th>
+                        <th>ยอดรวม</th>
+                        <th>จัดการ</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- สินค้าจะถูกแสดงที่นี่ผ่าน JavaScript -->
+                </tbody>
+            </table>
+            <div class="cart-summary">
+                <h3>ยอดรวมทั้งหมด: <span id="totalPrice">0</span> บาท</h3>
+                <button id="checkoutButton">ดำเนินการชำระเงิน</button>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <p>© 2024 ร้านค้าโอท็อป | สนับสนุนสินค้าชุมชน</p>
+    </footer>
+
+    <!-- JavaScript -->
+    <script>
+        // ดึงข้อมูลรถเข็นจาก Local Storage
+        const cart = JSON.parse(localStorage.getItem('cart')) || [];
+        const cartTable = document.querySelector('#cartTable tbody');
+        const totalPriceElement = document.getElementById('totalPrice');
+
+        // ฟังก์ชันแสดงสินค้าในรถเข็น
+        function displayCart() {
+            cartTable.innerHTML = ''; // เคลียร์ตาราง
+            let total = 0;
+
+            if (cart.length === 0) {
+                cartTable.innerHTML = '<tr><td colspan="5">รถเข็นของคุณว่างเปล่า</td></tr>';
+                totalPriceElement.textContent = '0';
+                return;
+            }
+
+            cart.forEach((item, index) => {
+                const itemTotal = item.price * (item.quantity || 1);
+                total += itemTotal;
+
+                cartTable.innerHTML += `
+                    <tr>
+                        <td>${item.name}</td>
+                        <td>${item.price} บาท</td>
+                        <td>
+                            <input type="number" value="${item.quantity || 1}" min="1" data-index="${index}" class="quantity-input">
+                        </td>
+                        <td>${itemTotal} บาท</td>
+                        <td><button onclick="removeItem(${index})" class="remove-btn">ลบ</button></td>
+                    </tr>
+                `;
+            });
+
+            totalPriceElement.textContent = total; // แสดงยอดรวมทั้งหมด
+        }
+
+        // ฟังก์ชันลบสินค้า
+        function removeItem(index) {
+            cart.splice(index, 1);
+            localStorage.setItem('cart', JSON.stringify(cart));
+            displayCart();
+        }
+
+        // ฟังก์ชันเปลี่ยนจำนวนสินค้า
+        cartTable.addEventListener('change', function(e) {
+            if (e.target.classList.contains('quantity-input')) {
+                const index = e.target.dataset.index;
+                cart[index].quantity = parseInt(e.target.value);
+                localStorage.setItem('cart', JSON.stringify(cart));
+                displayCart();
+            }
+        });
+
+        // เมื่อคลิก "ดำเนินการชำระเงิน"
+        document.getElementById('checkoutButton').addEventListener('click', function() {
+            alert('ขอบคุณที่สั่งซื้อสินค้า! ระบบกำลังพัฒนาในส่วนชำระเงิน');
+        });
+
+        // เรียกแสดงสินค้า
+        displayCart();
+    </script>
+</body>
+</html>

@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ร้านค้า - ร้านค้าโอท็อป</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <h1>ร้านค้าโอท็อป</h1>
+        <nav>
+            <a href="index.html">หน้าแรก</a>
+            <a href="shop.html">ร้านค้า</a>
+            <a href="cart.html">รถเข็น</a>
+            <a href="login.html" id="loginLink">เข้าสู่ระบบ</a>
+            <a href="#" id="logoutLink" style="display: none;">ออกจากระบบ</a>
+        </nav>
+    </header>
+
+    <!-- Admin Controls -->
+    <div id="adminControls" style="display: none; text-align: center; margin: 1rem;">
+        <button onclick="addNewProduct()">เพิ่มสินค้าใหม่</button>
+    </div>
+
+    <!-- Shop Content -->
+    <main>
+        <section class="product-section">
+            <h2>รายการสินค้า</h2>
+            <div class="product-list" id="productList">
+                <div class="product" data-index="0">
+                    <img src="product1.jpg" alt="สินค้า 1" style="width:100%; height:auto;">
+                    <h3>สินค้า 1</h3>
+                    <p>ราคา: 150 บาท</p>
+                    <button onclick="addToCart('สินค้า 1', 150)">เพิ่มไปยังรถเข็น</button>
+                    <button class="admin-btn" style="display:none;" onclick="editProduct(0)">แก้ไข</button>
+                    <button class="admin-btn" style="display:none;" onclick="deleteProduct(0)">ลบ</button>
+                </div>
+                <div class="product" data-index="1">
+                    <img src="product2.jpg" alt="สินค้า 2" style="width:100%; height:auto;">
+                    <h3>สินค้า 2</h3>
+                    <p>ราคา: 200 บาท</p>
+                    <button onclick="addToCart('สินค้า 2', 200)">เพิ่มไปยังรถเข็น</button>
+                    <button class="admin-btn" style="display:none;" onclick="editProduct(1)">แก้ไข</button>
+                    <button class="admin-btn" style="display:none;" onclick="deleteProduct(1)">ลบ</button>
+                </div>
+                <div class="product" data-index="2">
+                    <img src="product3.jpg" alt="สินค้า 3" style="width:100%; height:auto;">
+                    <h3>สินค้า 3</h3>
+                    <p>ราคา: 250 บาท</p>
+                    <button onclick="addToCart('สินค้า 3', 250)">เพิ่มไปยังรถเข็น</button>
+                    <button class="admin-btn" style="display:none;" onclick="editProduct(2)">แก้ไข</button>
+                    <button class="admin-btn" style="display:none;" onclick="deleteProduct(2)">ลบ</button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <p>© 2024 ร้านค้าโอท็อป | สนับสนุนสินค้าชุมชน</p>
+    </footer>
+
+    <!-- JavaScript -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const isLoggedIn = localStorage.getItem('isLoggedIn');
+            const currentUser = JSON.parse(localStorage.getItem('user'));
+            const loginLink = document.getElementById('loginLink');
+            const logoutLink = document.getElementById('logoutLink');
+            const adminControls = document.getElementById('adminControls');
+            const adminButtons = document.querySelectorAll('.admin-btn');
+
+            // ตรวจสอบสิทธิ์ Admin
+            if (isLoggedIn === 'true' && currentUser && currentUser.email === 'admin@example.com') {
+                adminControls.style.display = 'block';
+                adminButtons.forEach(btn => btn.style.display = 'inline-block');
+            }
+
+            if (isLoggedIn === 'true' && currentUser) {
+                loginLink.style.display = 'none';
+                logoutLink.style.display = 'inline';
+
+                logoutLink.addEventListener('click', function() {
+                    localStorage.removeItem('isLoggedIn');
+                    localStorage.removeItem('user');
+                    alert('ออกจากระบบสำเร็จ!');
+                    window.location.href = 'index.html';
+                });
+            }
+        });
+
+        function addToCart(productName, productPrice) {
+            let cart = JSON.parse(localStorage.getItem('cart')) || [];
+            const existingProductIndex = cart.findIndex(item => item.name === productName);
+            
+            if (existingProductIndex !== -1) {
+                cart[existingProductIndex].quantity += 1; // เพิ่มจำนวนสินค้า
+            } else {
+                cart.push({ name: productName, price: productPrice, quantity: 1 });
+            }
+
+            localStorage.setItem('cart', JSON.stringify(cart));
+            alert(productName + ' ถูกเพิ่มไปยังรถเข็น');
+        }
+
+        function addNewProduct() {
+            const name = prompt('ชื่อสินค้าใหม่:');
+            const price = prompt('ราคาสินค้า:');
+            if (name && price) {
+                alert('เพิ่มสินค้าใหม่: ' + name + ' ราคา: ' + price + ' บาท');
+            }
+        }
+
+        function editProduct(index) {
+            const name = prompt('แก้ไขชื่อสินค้า:');
+            const price = prompt('แก้ไขราคาสินค้า:');
+            if (name && price) {
+                alert('สินค้าได้รับการแก้ไข: ' + name + ' ราคา: ' + price + ' บาท');
+            }
+        }
+
+        function deleteProduct(index) {
+            if (confirm('ต้องการลบสินค้านี้ใช่ไหม?')) {
+                alert('ลบสินค้าสำเร็จ!');
+            }
+        }
+    </script>
+</body>
+</html>
