@@ -34,28 +34,36 @@
 
     <!-- Footer -->
     <footer>
-        <p>© 2024 ร้านค้าโอท็อป | สนับสนุนสินค้าชุมชน</p>
+        <p>&copy; 2024 ร้านค้าโอท็อป | สนับสนุนสินค้าชุมชน</p>
     </footer>
 
     <!-- JavaScript -->
     <script>
-        document.getElementById('loginForm').addEventListener('submit', function(e) {
+        document.getElementById('loginForm').addEventListener('submit', async function (e) {
             e.preventDefault();
 
             // รับค่าจากฟอร์ม
-            const email = document.getElementById('email').value;
-            const password = document.getElementById('password').value;
+            const email = document.getElementById('email').value.trim();
+            const password = document.getElementById('password').value.trim();
 
-            // ดึงข้อมูลผู้ใช้จาก Local Storage
-            const userData = JSON.parse(localStorage.getItem('user'));
+            try {
+                // ส่งข้อมูลไปยังเซิร์ฟเวอร์ผ่าน fetch API
+                const response = await fetch('/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, password })
+                });
 
-            // ตรวจสอบข้อมูล
-            if (userData && userData.email === email && userData.password === password) {
-                alert('เข้าสู่ระบบสำเร็จ! ยินดีต้อนรับคุณ ' + userData.name);
-                localStorage.setItem('isLoggedIn', 'true');
-                window.location.href = 'index.html'; // เปลี่ยนเส้นทางไปหน้าแรก
-            } else {
-                alert('อีเมลหรือรหัสผ่านไม่ถูกต้อง กรุณาลองใหม่อีกครั้ง');
+                if (response.ok) {
+                    const result = await response.json();
+                    alert(result.message); // แจ้งเตือนข้อความจากเซิร์ฟเวอร์
+                    window.location.href = result.redirect; // เปลี่ยนหน้าไป index.html
+                } else {
+                    alert('อีเมลหรือรหัสผ่านไม่ถูกต้อง กรุณาลองใหม่อีกครั้ง');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('เกิดข้อผิดพลาดในระบบ กรุณาลองใหม่อีกครั้ง');
             }
         });
     </script>

@@ -20,7 +20,7 @@
     <main>
         <section class="form-container">
             <h2>กรอกข้อมูลเพื่อสมัครสมาชิก</h2>
-            <form id="signupForm">
+            <form id="signupForm" action="/signup" method="POST">
                 <label for="name">ชื่อ-นามสกุล:</label>
                 <input type="text" id="name" name="name" required>
 
@@ -28,10 +28,13 @@
                 <input type="email" id="email" name="email" required>
 
                 <label for="dob">วันเดือนปีเกิด:</label>
-                <input type="date" id="dob" name="dob" required>
+                <input type="date" id="dob" name="birth_date" required>
 
                 <label for="address">ที่อยู่:</label>
-                <textarea id="address" name="address" rows="3" required></textarea>
+                <input type="text" id="address" name="address" required>
+
+                <label for="phone">หมายเลขโทรศัพท์:</label>
+                <input type="tel" id="phone" name="phone" required>
 
                 <label for="password">รหัสผ่าน:</label>
                 <input type="password" id="password" name="password" required>
@@ -41,30 +44,32 @@
         </section>
     </main>
 
-    <!-- Footer -->
-    <footer>
-        <p>© 2024 ร้านค้าโอท็อป | สนับสนุนสินค้าชุมชน</p>
-    </footer>
-
-    <!-- JavaScript -->
     <script>
-        document.getElementById('signupForm').addEventListener('submit', function(e) {
+        document.getElementById('signupForm').addEventListener('submit', async (e) => {
             e.preventDefault();
 
-            // รับค่าจากฟอร์ม
-            const name = document.getElementById('name').value;
-            const email = document.getElementById('email').value;
-            const dob = document.getElementById('dob').value;
-            const address = document.getElementById('address').value;
-            const password = document.getElementById('password').value;
+            const formData = {
+                name: document.getElementById('name').value,
+                email: document.getElementById('email').value,
+                password: document.getElementById('password').value,
+                birth_date: document.getElementById('dob').value,
+                address: document.getElementById('address').value,
+                phone: document.getElementById('phone').value // เพิ่มหมายเลขโทรศัพท์
+            };
 
-            // บันทึกข้อมูลลง Local Storage
-            const userData = { name, email, dob, address, password };
-            localStorage.setItem('user', JSON.stringify(userData));
+            const response = await fetch('/signup', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(formData)
+            });
 
-            // แจ้งเตือนและเปลี่ยนหน้าไป login.html
-            alert('สมัครสมาชิกสำเร็จ! กรุณาเข้าสู่ระบบ');
-            window.location.href = 'login.html';
+            const result = await response.text();
+            alert(result); // แจ้งเตือนสถานะจากเซิร์ฟเวอร์
+            
+            // เปลี่ยนหน้าไปที่ login.html หลังสมัครสมาชิกเสร็จ
+            if (response.ok) {
+                window.location.href = 'login.html';
+            }
         });
     </script>
 </body>
